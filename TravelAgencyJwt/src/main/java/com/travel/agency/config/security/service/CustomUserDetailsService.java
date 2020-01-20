@@ -21,6 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
 		AppUser user = userRepository.findByUsername(usernameOrEmail)
 			.orElseThrow(()->new UsernameNotFoundException("User not found with : "+usernameOrEmail));
+		System.out.println(user);
 		return UserPrincipal.getUserDetails(user);
 	}
 
