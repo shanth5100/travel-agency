@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.travel.agency.DAO.UserRepository;
 import com.travel.agency.bean.AppUser;
 import com.travel.agency.config.security.jwt.JwtTokenProvider;
+import com.travel.agency.config.security.service.CustomUserDetailsService;
 import com.travel.agency.payload.request.LoginRequest;
 import com.travel.agency.payload.request.SignUpRequest;
 import com.travel.agency.payload.response.JwtAuthenticationResponse;
@@ -42,19 +44,23 @@ public class AppUserController {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	CustomUserDetailsService userDetailService;
+	
 	@PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> register(@Valid @RequestBody SignUpRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return new ResponseEntity<Object>(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
 		} 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return new ResponseEntity<Object>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(new ApiResponse(false, "Email address already in use!"), HttpStatus.BAD_REQUEST);
 		} 
 		
 		AppUser user = new AppUser();
 		
 		user.setUsername(signUpRequest.getUsername());
-		user.setPassword(signUpRequest.getPassword());
+//		user.setPassword(signUpRequest.getPassword());
+		user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 		user.setEmail(signUpRequest.getEmail());
 		
 		AppUser appUser = userRepository.save(user);
@@ -68,22 +74,38 @@ public class AppUserController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+		
 		Authentication authentication = authenticationManager
 				.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
 				);
+//		
+		SecurityContextHolder.getContext().setAuthentication(authentication); // set the logged in status
 		
-//		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-//			return new ResponseEntity<Object>(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
-//		} 
-//		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-//			return new ResponseEntity<Object>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
-//		} 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		UserDetails userDetails = userDetailService.loadUserByUsername(loginRequest.getUsername());
 		
-		String jwtToken = jwtTokenProvider.generateToken(authentication);
-		
+		String jwtToken = jwtTokenProvider.generateToken(userDetails);
 		return ResponseEntity.ok(new JwtAuthenticationResponse(jwtToken));
+//		
+//		if (userRepository.existsByEmail(loginRequest.getUsername())) {
+//			AppUser appUser= null;
+//			try {
+//				appUser = userRepository.findByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
+//				System.out.println(appUser);
+//				if (appUser != null) {
+////					String s = jwtTokenProvider.generateToken(authentication)
+//					return ResponseEntity.ok(new JwtAuthenticationResponse("jwtToken"));
+//				} else {
+//				}
+//				
+//				return ResponseEntity.ok(new JwtAuthenticationResponse("jwtToken"));
+//			} catch (Exception e) {
+//				return ResponseEntity.ok(new ApiResponse(false, "Bad credentials"));
+//			}
+//			
+//		} 
+//		return ResponseEntity.ok(new ApiResponse(false, "Bad credentials"));
+//		return ResponseEntity.ok(new JwtAuthenticationResponse("jwtToken"));
 	}
 	
 }

@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<AppUser, Long>{
 	Optional<AppUser> findByUsername(String username);
 	Optional<AppUser> findByUsernameOrEmail(String username, String email);
 	
+	// Custom method for login request
+	AppUser findByUsernameAndPassword(String username, String email);
+	
 }
