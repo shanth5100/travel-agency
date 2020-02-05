@@ -40,7 +40,7 @@ public class AppUserController {
 //	org.springframework.security.authentication.AuthenticationManager authManager;
 	
 	@PostMapping("register")
-	private ResponseEntity<?> register(@Valid @RequestBody com.travel.oAuth2.config.payload.request.SignUpRequest signUpRequest) {
+	private ResponseEntity<?> register(@Valid @RequestBody SignUpRequest signUpRequest) {
 		if (appUserDao.existsByEmail(signUpRequest.getEmail())) {
 			return ResponseEntity.ok(new ApiResponse("Email already exists", 400));
 		}
