@@ -1,21 +1,21 @@
 package com.travel.agency.payload.response.error;
 
 public class ApiResponse {
-	private Boolean success;
+	private int code;
     private String message;
     
-	public ApiResponse(Boolean success, String message) {
+	public ApiResponse(String message, int code) {
 		super();
-		this.success = success;
+		this.code = code;
 		this.message = message;
 	}
 
-	public Boolean getSuccess() {
-		return success;
+	public int getcode() {
+		return code;
 	}
 
-	public void setSuccess(Boolean success) {
-		this.success = success;
+	public void setcode(int code) {
+		this.code = code;
 	}
 
 	public String getMessage() {

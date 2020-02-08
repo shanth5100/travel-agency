@@ -8,9 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "user")
 public class AppUser {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -27,6 +26,10 @@ public class AppUser {
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -57,5 +60,5 @@ public class AppUser {
 	public String toString() {
 		return "AppUser [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + "]";
 	}
-	
+
 }
