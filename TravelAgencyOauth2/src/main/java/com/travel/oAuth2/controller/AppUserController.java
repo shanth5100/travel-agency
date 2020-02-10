@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.travel.oAuth2.DAO.AppUserDao;
 import com.travel.oAuth2.bean.AppUser;
 import com.travel.oAuth2.config.jwt.JwtTokenProvider;
-import com.travel.oAuth2.config.jwt.UserDetailsServiceImpl;
+import com.travel.oAuth2.config.userDetails.UserDetailsServiceImpl;
 import com.travel.oAuth2.config.payload.request.SignUpRequest;
 import com.travel.oAuth2.config.payload.response.ApiResponse;
 import com.travel.oAuth2.config.payload.response.LoginResponseWithToken;

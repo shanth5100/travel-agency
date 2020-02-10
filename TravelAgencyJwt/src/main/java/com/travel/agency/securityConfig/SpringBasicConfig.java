@@ -1,8 +1,9 @@
 package com.travel.agency.securityConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,17 +36,18 @@ public class SpringBasicConfig extends WebSecurityConfigurerAdapter{
 		 auth.authenticationProvider(authenticationProvider());
 	 }
 	 
-private DaoAuthenticationProvider authenticationProvider() {
+	 private DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider =  new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService);
 		authenticationProvider.setPasswordEncoder(encoder());
 		return authenticationProvider;
-	}
+	 }
+
 //	 @Override
-//	 @Bean
-//	 public AuthenticationManager authenticationManagerBean() throws Exception {
-//	     return super.authenticationManagerBean();
-//	 }
+	 @Bean
+	 public AuthenticationManager authenticationManagerBean() throws Exception {
+	     return super.authenticationManagerBean();
+	 }
 	private PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}

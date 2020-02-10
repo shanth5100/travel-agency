@@ -5,6 +5,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +25,8 @@ import com.travel.agency.payload.response.error.ApiResponse;
 @RequestMapping("/travel/auth/")
 public class AuthController {
 
+	AuthenticationManager authentication;
+	
 	@Autowired
 	UserRepository userRepository;
 	
@@ -51,9 +57,20 @@ public class AuthController {
 
 	@PostMapping("login")
 	@ResponseStatus(value = HttpStatus.OK)
-	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login) {
-		
+	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login) throws Exception {
+//		authenticate(login.getUsername(), login.getPassword());
 		return ResponseEntity.ok(new ApiResponse("user logged-in succesfully", 202));
+	}
+
+	private void authenticate(String username, String password) throws Exception{
+		System.out.println(password + "   name    "+ username);
+		try {
+			authentication.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		} catch (DisabledException e) {
+			throw new Exception("USER_DISABLED", e);
+		} catch (BadCredentialsException e) {
+			throw new Exception("INVALID_CREDENTIALS", e);
+		}
 	}
 	
 }

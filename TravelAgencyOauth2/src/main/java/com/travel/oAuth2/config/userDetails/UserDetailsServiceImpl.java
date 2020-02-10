@@ -1,4 +1,4 @@
-package com.travel.oAuth2.config.jwt;
+package com.travel.oAuth2.config.userDetails;
 
 import java.util.ArrayList;
 
