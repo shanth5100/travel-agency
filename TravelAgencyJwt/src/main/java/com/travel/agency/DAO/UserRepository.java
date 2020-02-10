@@ -22,5 +22,6 @@ public interface UserRepository extends JpaRepository<AppUser, Long>{
 	
 	// Custom method for login request
 	AppUser findByUsernameAndPassword(String username, String email);
+	AppUser findUserByUsername(String username);
 	
 }

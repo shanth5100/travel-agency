@@ -18,11 +18,12 @@ import com.travel.oAuth2.bean.AppUser;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-//	@Autowired
+	@Autowired
 	UserDetails userDetails;// = new User(null, null, false, false, false, false, null);
 	
 	@Autowired
 	AppUserDao appUserDao;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		AppUser user = appUserDao.findByUsername(username);
@@ -31,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new UsernameNotFoundException("Username not found by " + username);
 		}
 		
-		User secureUser = new User(user.getUsername(), user.getPassword(), new ArrayList<>());
+		UserDetails secureUser = new User(user.getUsername(), user.getPassword(), new ArrayList<>());
 		return secureUser;
 	}
 
