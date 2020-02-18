@@ -12,14 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.travel.agency.securityConfig.userDetailsService.UserDetailsServiceIMpl;
+import com.travel.agency.securityConfig.userDetailsService.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SpringBasicConfig extends WebSecurityConfigurerAdapter{
 
 	
-	UserDetailsServiceIMpl userDetailsService; 
+	UserDetailsServiceImpl userDetailsService; 
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
@@ -42,7 +42,7 @@ public class SpringBasicConfig extends WebSecurityConfigurerAdapter{
 		authenticationProvider.setPasswordEncoder(encoder());
 		return authenticationProvider;
 	 }
-
+ 
 //	 @Override
 	 @Bean
 	 public AuthenticationManager authenticationManagerBean() throws Exception {

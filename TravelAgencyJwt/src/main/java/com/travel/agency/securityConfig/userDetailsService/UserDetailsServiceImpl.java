@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.travel.agency.DAO.UserRepository;
 import com.travel.agency.bean.AppUser;
 
-public class UserDetailsServiceIMpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UserDetailsService{
 
 	@Autowired
 	UserRepository userRepository;

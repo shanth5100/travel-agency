@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,8 @@ import com.travel.agency.bean.AppUser;
 import com.travel.agency.payload.request.LoginRequest;
 import com.travel.agency.payload.request.SignUpRequest;
 import com.travel.agency.payload.response.error.ApiResponse;
+import com.travel.agency.securityConfig.jwt.JwtTokenProvider;
+import com.travel.agency.securityConfig.userDetailsService.UserDetailsServiceImpl;
 
 @RestController
 @RequestMapping("/travel/auth/")
@@ -29,6 +32,11 @@ public class AuthController {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	UserDetailsServiceImpl userDetailsServiceImpl;
+	
+	@Autowired
+	JwtTokenProvider tokenProvider;
 	
 	private AppUser converSignupToAppUser(@Valid SignUpRequest signup) {
 		
@@ -59,6 +67,12 @@ public class AuthController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login) throws Exception {
 //		authenticate(login.getUsername(), login.getPassword());
+//		UserDetails userDetails = null;
+		
+		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(login.getUsername());
+		
+		tokenProvider.genarateToken(userDetails);
+		
 		return ResponseEntity.ok(new ApiResponse("user logged-in succesfully", 202));
 	}
 

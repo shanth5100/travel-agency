@@ -18,7 +18,7 @@ import com.travel.oAuth2.bean.AppUser;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Autowired
+//	@Autowired
 	UserDetails userDetails;// = new User(null, null, false, false, false, false, null);
 	
 	@Autowired
