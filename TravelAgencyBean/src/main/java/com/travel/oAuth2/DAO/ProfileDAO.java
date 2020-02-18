@@ -5,10 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.travel.oAuth2.bean.Profile;
 
-//@Repository
-public interface ProfileDAO
-//extends JpaRepository<Profile, Long>
-{
+@Repository
+public interface ProfileDAO extends JpaRepository<Profile, Long>{
 	
 	Profile findById(int frofileId);
+//	find
 }
