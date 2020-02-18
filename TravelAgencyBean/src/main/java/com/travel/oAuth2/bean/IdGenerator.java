@@ -20,5 +20,4 @@ public class IdGenerator {
 		this.id = id;
 	}
 	
-	
 }
